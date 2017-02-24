@@ -1,0 +1,36 @@
+/*
+      Licensed Materials - Property of IBM
+      © IBM Corp. 2016
+*/
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+
+var call = require('./call');
+
+/*
+ * This function handles logging into an APIC MGMT server.
+ *
+ * @param {string} username - the username to login with
+ * @param {string} password - the password to login with
+ * @param {string} server - the server to login to
+ * @param {function} callback - the function to execute upon completion
+ *
+ */
+
+function apicLogin(username, password, server, callback) {
+    if (!username || !password || !server) {
+        return callback("Error: Missing parameters");
+    }
+    var loginString = 'apic login --username ' + username + ' --password ' + password + ' --server ' + server;
+    call(loginString, function (err, stdout) {
+        if (err) {
+            console.error("ERR: " + err.toString().replace(password, "******"));
+        }
+        return callback(stdout);
+    });
+}
+
+module.exports = apicLogin;

@@ -1,0 +1,39 @@
+/*
+      Licensed Materials - Property of IBM
+      © IBM Corp. 2016
+*/
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+
+var call = require('./call');
+
+/*
+ * This function handles logging out of an APIC MGMT server.
+ *
+ * @param {string} server - the server to logout of
+ * @param {function} callback - the function to execute upon completion
+ *
+ */
+
+
+function apicLogout(server, callback) {
+
+    function CustomErr(message, returnCode) {
+        this.message = message;
+        this.returnCode = returnCode;
+    }
+
+    var error;
+    call('apic logout --server ' + server, function (err, stdout, stderr) {
+        if (err) {
+            error = new CustomErr(err, 500);
+        }
+        console.error(stdout);
+        return callback(error, stderr, stdout);
+    });
+}
+
+module.exports = apicLogout;

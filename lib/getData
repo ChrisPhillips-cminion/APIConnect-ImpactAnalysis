@@ -1,0 +1,157 @@
+/*
+      Licensed Materials - Property of IBM
+      © IBM Corp. 2016
+*/
+'use strict';
+// Data model
+var Org = require('../model/Org.js');
+var InvokeURL = require('../model/InvokeURL.js');
+var InvokeMQ = require('../model/InvokeMQ.js');
+var API = require('../model/API.js');
+var Product = require('../model/Product.js');
+var Plan = require('../model/Plan.js');
+var App = require('../model/App.js');
+var Catalog = require('../model/Catalog.js');
+
+// Scripts
+var downloadYamlForProduct = require('./downloadYamlForProduct.js');
+var parseYaml = require('./parseYaml.js');
+var call = require('./call');
+var async = require('async');
+var forEachThen = require('foreachthen');
+
+// Dependancies
+var yaml = require('js-yaml');
+var fs = require('fs.extra');
+
+function getData(config, callback) {
+    function getSubscriptions(tempAppList, cat, callback) {
+        call('apic subscriptions -c ' + cat + ' --server ' + config.server + ' --organization ' + config.organization, function (err, stdout, stderr) {
+            if (err) {
+                console.error(err);
+                throw err;
+            }
+            if (stderr) {
+                console.error(stderr);
+                throw stderr;
+            }
+
+            stdout.toString().split('\n').forEachThen(function (callback, line) {
+                if (line !== "") {
+                    var appName = line.split(" ")[2],
+                        prod_v_plan = line.split(" ")[4].toString(),
+                        prod = prod_v_plan.split(':')[0],
+                        prodv = prod_v_plan.split(':')[1],
+                        plan = prod_v_plan.split(':')[2],
+                        app = new App(appName);
+                    if (tempAppList[prod] === undefined) {
+                        tempAppList[prod] = {};
+                    }
+                    if (tempAppList[prod][prodv] === undefined) {
+                        tempAppList[prod][prodv] = {};
+                    }
+                    if (tempAppList[prod][prodv][plan] === undefined) {
+                        tempAppList[prod][prodv][plan] = [];
+                    }
+                    tempAppList[prod][prodv][plan].push(app);
+                }
+                callback();
+            }, callback);
+
+        });
+    }
+
+    function processProduct(tempAppList, tempAPIList, tempProductList, catObj, callback) {
+        var product;
+        tempProductList.forEachThen(function (callback, prod) {
+            product = new Product(prod.name, prod.version, prod.title);
+            for (var keyProd in prod.plans) {
+                var planObj = new Plan(keyProd, prod.plans[keyProd].title);
+                if ((tempAppList[prod.name] != undefined) && (tempAppList[prod.name][prod.version] != undefined)) {
+                    planObj.apps = tempAppList[prod.name][prod.version][planObj.name];
+                }
+                var keyArray = Object.keys(prod.apis);
+                keyForEachThen(keyArray, planObj, product, tempAPIList, prod);
+            }
+            catObj.products.push(product);
+            callback();
+        }, callback);
+    }
+
+    function keyForEachThen(array, planObj, product, tempAPIList, prod) {
+        array.forEachThen(function (callback, key) {
+            planObj.apis.push(tempAPIList[prod.apis[key].$ref]);
+            callback();
+        }, function () {
+            product.plans.push(planObj);
+        });
+    }
+    var org = new Org(config.organization);
+    downloadYamlForProduct(config, function () {
+        var catCalls = [], commands = [];
+        Object.keys(config.catalog).forEachThen(
+            function (callbackP, cat) {
+                var tempAPIList = {},
+                    tempAppList = {},
+                    tempProductList = [],
+                    tempProductListtempAppList = {},
+                    tempProductListcommands = [];
+                commands.push(function (callback) {
+                    getSubscriptions(tempAppList, cat, callback);
+                });
+                commands.push(function (callbackpp) {
+                    //get Catalog displayName
+                    call('apic catalogs:get ' + cat + ' --server ' + config.server + ' --organization ' + config.organization, function (err, stdout, stderr) {
+                        if (err) {
+                            console.error(err);
+                            throw err;
+                        } else if (stderr) {
+                            console.error(stderr);
+                            throw stderr;
+                        } else {
+                            var jsonFile = yaml.safeLoad(stdout);
+                            var displayName = jsonFile['display name'];
+                            var catObj = new Catalog(cat, displayName);
+                            org.catalogs.push(catObj);
+                            fs.readdir('tmp/' + cat, function (err, files) {
+                                var calls = [];
+                                files.forEachThen(
+                                    function (callback, file) {
+                                        parseYaml('tmp/' + cat + '/' + file, function (err, results) {
+                                            var iurl;
+                                            if (results.products.plans === undefined) {
+                                                if (results.apis.service) {
+                                                    iurl = new InvokeURL(results.apis.service);
+                                                } else if (results.apis.queuemanager) {
+                                                    iurl = new InvokeMQ(results.apis.queuemanager, results.apis.requestqueue);
+                                                }
+                                                var api = new API(results.apis.apiname, results.apis.version, results.apis.title);
+                                                api.invokes.push(iurl);
+                                                tempAPIList[file] = api;
+                                            } else {
+                                                tempProductList.push(results.products);
+                                            }
+                                        });
+                                        callback();
+                                    },
+                                    function () {
+                                        processProduct(tempAppList, tempAPIList, tempProductList, catObj, function () {
+                                            callbackpp();
+                                        });
+                                    });
+                            });
+                        }
+                    });
+                });
+                async.series(commands, function (err, result) {
+                    console.error("Processing Complete for " + cat);
+                    callbackP();
+                });
+            },
+            function (err, result) {
+                callback(org);
+                fs.rmrf('tmp/');
+            });
+    });
+}
+module.exports = getData;

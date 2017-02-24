@@ -1,0 +1,31 @@
+/*
+      Licensed Materials - Property of IBM
+      © IBM Corp. 2016
+*/
+
+'use strict';
+/**
+ * Module dependencies.
+ */
+
+var exec = require('child_process').exec;
+
+/*
+ * This function spawns a child process to call the APIC toolkit commands
+ *
+ * @param {string} cmd - this is the command that will be run from the child process
+ * @param {function} callback - the function to execute upon completion
+ *
+ */
+
+function call(cmd, callback) {
+    exec(cmd, {}, function (err, stdout, stderr) {
+        if (err) {
+            console.error(err);
+        }
+        return callback(err, stdout, stderr);
+    });
+
+}
+
+module.exports = call;
