@@ -2,9 +2,10 @@
 
 Understanding interdependencies between the API Components and the back-end Service is critical for a successful business.
 The purpose of this tool is to assess an API Catalog on API Connect and return the dependencies between the APIs, Applications, Products, Plans and Backend Services in a simple and human-readable form.
+
 ```
 Sandbox
-└────>company.com
+└────> company.com
     ├────>/card
     │ ├────>API - Switchable : 1.0.0
     │ └────>API - Gateway users : 1.0.0
@@ -18,6 +19,16 @@ Sandbox
         ├────>API - supply-chains Optimization : 1.0.0
         └────>API - scalable Concrete Granite : 1.0.0
 ```
+The information in the example above is displayed in the following schema
+
+```
+Catalog
+└────> Service - Server / QueueManager
+    └────> Service - Path / Queue
+        └────> API
+
+```
+
 Using this tool, you can seamlessly review the back-end services and understand the critical dependencies of your APIs. This is beneficial for at-a-glance assessments and understanding of your APIc estate.
 APICIA is a node.js application which interacts with the API Connect via the command line through a series of commands which you run using the interactive interface provided by the application.
 
