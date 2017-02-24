@@ -1,12 +1,27 @@
 # APICIA - API Connect Impact Analysis
 
-Understanding interdependencies between the API Components and the Backend Service is critical for a successful business.
+Understanding interdependencies between the API Components and the back-end Service is critical for a successful business.
+The purpose of this tool is to assess an API Catalog on API Connect and return the dependencies between the APIs, Applications, Products, Plans and Backend Services in a simple and human-readable form.
+```
+Sandbox
+└────>company.com
+    ├────>/card
+    │ ├────>API - Switchable : 1.0.0
+    │ └────>API - Gateway users : 1.0.0
+    ├────>/bank
+    │ ├────>API - Chicken : 1.0.0
+    │ └────>API - Agent : 1.0.0
+    ├────>/core
+    │ ├────>API - Auto Loan Account Fantastic Wooden Towels : 1.0.0
+    │ └────>API - supply-chains : 1.0.0
+    └────>/request/soap
+        ├────>API - supply-chains Optimization : 1.0.0
+        └────>API - scalable Concrete Granite : 1.0.0
+```
+Using this tool, you can seamlessly review the back-end services and understand the critical dependencies of your APIs. This is beneficial for at-a-glance assessments and understanding of your APIc estate.
+APICIA is a node.js application which interacts with the API Connect via the command line through a series of commands which you run using the interactive interface provided by the application.
 
-The purpose of this tool is to assess an API Catalog and return dependencies between the APIs and the services they calls. Using this, you can seamlessly the back-end services and understand the critical dependencies.
-APICIA is a node.js application which interacts with the API Connect command line through a series of command you run in the interactive interface provided.
-
-
-The purpose of this tool is to assess an API Catalog and return dependencies between the APIs, Applications, Products, Plans and Backend Services.
+##Installation
 
 Once the repository has been cloned; start the tool with
 
@@ -33,8 +48,9 @@ node apicia.js [--json] [--load <path>] [--help]
 ```
 
 ## Example Config
-This is what is saved by the interactive prompts
+Here is an example of the JSON response file structure that can be used to configure the application.
 ```
+~/$ cat .apicia
 {
   "tempfolder": "tmp",
   "password": "BASE 64 Password",
@@ -60,7 +76,7 @@ This is what is saved by the interactive prompts
 ## Example
 
  ```
- node apicia.js  --load .apicia
+ ~/$ node apicia.js  --load .apicia
 ✔ Logging in...
 Begin downloadYamlForProduct function for sb
 ✔ Downloading Product sb:prod_methodfront-end:1.0.0 this may take a few minutes...
