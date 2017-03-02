@@ -34,7 +34,13 @@ APICIA is a node.js application which interacts with the API Connect via the com
 
 ##Installation
 
-Once the repository has been cloned; start the tool with
+Once the repository has been cloned run npm install in the directoy with package.json
+
+```
+npm install
+```
+
+Then start the tool with
 
 ```
  node apicia.js

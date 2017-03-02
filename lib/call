@@ -20,9 +20,9 @@ var exec = require('child_process').exec;
 
 function call(cmd, callback) {
     exec(cmd, {}, function (err, stdout, stderr) {
-        if (err) {
-            console.error(err);
-        }
+//        if (err) {
+//           console.error(err);
+//        }
         return callback(err, stdout, stderr);
     });
 
