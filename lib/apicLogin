@@ -27,7 +27,7 @@ function apicLogin(username, password, server, callback) {
     var loginString = 'apic login --username ' + username + ' --password ' + password + ' --server ' + server;
     call(loginString, function (err, stdout) {
         if (err) {
-            console.error("ERR: " + err.toString().replace(password, "******"));
+            console.error("ERR: " + err.toString().replace("--password "+password, "--password ******"));
         }
         return callback(stdout);
     });
