@@ -5,8 +5,8 @@ The purpose of this tool is to assess an API Catalog on API Connect and return t
 
 ```
 Sandbox
-└────> company.com
-    ├────>/card
+└────> Service Host - company.com
+    ├────> Service Path - /card
     │ ├────>API - Switchable : 1.0.0
     │ └────>API - Gateway users : 1.0.0
     ├────>/bank
