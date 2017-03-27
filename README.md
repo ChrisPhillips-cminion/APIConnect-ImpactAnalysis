@@ -32,7 +32,7 @@ Catalog
 Using this tool, you can seamlessly review the back-end services and understand the critical dependencies of your APIs. This is beneficial for at-a-glance assessments and understanding of your APIc estate.
 APICIA is a node.js application which interacts with the API Connect via the command line through a series of commands which you run using the interactive interface provided by the application.
 
-##Installation
+## Installation
 
 Once the repository has been cloned run npm install in the directoy with package.json
 
