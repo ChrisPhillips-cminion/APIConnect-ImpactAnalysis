@@ -1,3 +1,5 @@
+// Copyright IBM Corp. 2017. All Rights Reserved.
+// Licensed under "The MIT License (MIT)"
 var arrowDiagram = require('json-hood');
 
 var Org = require('./Org.js');

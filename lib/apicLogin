@@ -24,7 +24,7 @@ function apicLogin(username, password, server, callback) {
     if (!username || !password || !server) {
         return callback("Error: Missing parameters");
     }
-    var loginString = 'apic login --username ' + username + ' --password ' + password + ' --server ' + server;
+    var loginString = 'node_modules/.bin/apic login --username ' + username + ' --password ' + password + ' --server ' + server;
     call(loginString, function (err, stdout) {
         if (err) {
             console.error("ERR: " + err.toString().replace("--password "+password, "--password ******"));

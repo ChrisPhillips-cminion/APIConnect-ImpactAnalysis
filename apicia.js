@@ -1,3 +1,5 @@
+// Copyright IBM Corp. 2017. All Rights Reserved.
+// Licensed under "The MIT License (MIT)"
 'use strict';
 var f = require('./lib/functions.js');
 var config = require('./lib/config.js');
