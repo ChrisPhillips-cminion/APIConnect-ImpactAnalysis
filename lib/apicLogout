@@ -27,7 +27,7 @@ function apicLogout(server, callback) {
     }
 
     var error;
-    call('apic logout --server ' + server, function (err, stdout, stderr) {
+    call('node_modules/.bin/apic logout --server ' + server, function (err, stdout, stderr) {
         if (err) {
             error = new CustomErr(err, 500);
         }
