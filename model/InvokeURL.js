@@ -8,7 +8,6 @@ var urlImport = require('url');
 
 
 function InvokeURL(url) {
-	console.log(url);
 	if (typeof url == "url") {
 		this.url=url;
 	}
