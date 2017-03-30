@@ -1,0 +1,1704 @@
+swagger: '2.0'
+info:
+  x-ibm-name: testdiego
+  title: TestDiego
+  version: 1.0.0
+schemes:
+  - https
+host: $(catalog.host)
+basePath: /testdiego
+consumes:
+  - application/xml
+produces:
+  - application/xml
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+security:
+  - clientIdHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  assembly:
+    execute:
+      - invoke:
+          title: invoke
+          timeout: 60
+          verb: POST
+          cache-response: protocol
+          cache-ttl: 900
+          stop-on-error:
+            - null
+          tls-profile: diego
+          target-url: 'https://www.txstestrbm.com/ESBCompra/CompraElectronica'
+          username: APITestBM
+          password: 'Redeban1/*-'
+  phase: realized
+  targets:
+    CompraElectronica_HTTP_Service:
+      swagger: '2.0'
+      info:
+        title: CompraElectronica_HTTP_Service
+        description: ''
+        x-ibm-name: compraelectronicahttpservice
+        version: 1.0.0
+      schemes:
+        - https
+      basePath: /CompraElectronica_HTTP_Service
+      produces:
+        - application/xml
+      consumes:
+        - text/xml
+      securityDefinitions:
+        clientID:
+          type: apiKey
+          name: X-IBM-Client-Id
+          in: header
+          description: ''
+      security:
+        - clientID: []
+      x-ibm-configuration:
+        type: wsdl
+        wsdl-definition:
+          wsdl: 5813713c0cf2ca5933bf14c0
+          service: CompraElectronica_HTTP_Service
+          port: CompraElectronica_HTTP_Port
+          soap-version: '1.1'
+        assembly:
+          execute:
+            - proxy:
+                title: proxy
+                target-url: 'https://txsprodrbm.com/ESBCompra/CompraElectronica'
+        gateway: datapower-gateway
+        enforced: true
+        testable: true
+        phase: realized
+        cors:
+          enabled: true
+      paths:
+        /compraProcesar:
+          post:
+            summary: Operation compraProcesar
+            description: ''
+            operationId: compraProcesar
+            parameters:
+              - in: body
+                name: body
+                required: true
+                schema:
+                  $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraProcesarInput'
+            responses:
+              default:
+                description: ''
+                schema:
+                  $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraProcesarOutput'
+            x-ibm-soap:
+              soap-action: ''
+              soap-operation: '{http://www.rbm.com.co/esb/comercio/compra/}compraProcesar'
+        /compraReversar:
+          post:
+            summary: Operation compraReversar
+            description: ''
+            operationId: compraReversar
+            parameters:
+              - in: body
+                name: body
+                required: true
+                schema:
+                  $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraReversarInput'
+            responses:
+              default:
+                description: ''
+                schema:
+                  $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraReversarOutput'
+            x-ibm-soap:
+              soap-action: ''
+              soap-operation: '{http://www.rbm.com.co/esb/comercio/compra/}compraReversar'
+      definitions:
+        Security:
+          xml:
+            namespace: 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd'
+            prefix: wsse
+          type: object
+          properties:
+            UsernameToken:
+              type: object
+              properties:
+                Username:
+                  type: string
+                Password:
+                  type: string
+        compraProcesarInput:
+          type: object
+          properties:
+            Envelope:
+              xml:
+                prefix: soap-env
+                namespace: 'http://schemas.xmlsoap.org/soap/envelope/'
+              type: object
+              properties:
+                Header:
+                  $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraProcesarHeader'
+                Body:
+                  type: object
+                  properties:
+                    compraProcesarSolicitud:
+                      $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraProcesarSolicitud'
+          example: >-
+            <soap-env:Envelope
+            xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+
+             <soap-env:Header>
+
+              <wsse:Security
+            xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+
+               <UsernameToken>
+
+                <Username>string</Username>
+
+                <Password>string</Password>
+
+               </UsernameToken>
+
+              </wsse:Security>
+
+             </soap-env:Header>
+
+             <soap-env:Body>
+
+              <tns:compraProcesar
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/">
+
+               <tns:cabeceraSolicitud>
+
+                <tns:infoPuntoInteraccion>
+
+                 <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+                 <ns2:idTerminal>string</ns2:idTerminal>
+
+                 <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+                 <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+                 <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+                 <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+                </tns:infoPuntoInteraccion>
+
+               </tns:cabeceraSolicitud>
+
+               <tns:idPersona>
+
+                <ns1:tipoDocumento>string</ns1:tipoDocumento>
+
+                <ns1:numDocumento>3</ns1:numDocumento>
+
+               </tns:idPersona>
+
+               <tns:infoMedioPago>
+
+                <tns:infoCHIP>
+
+                 <ns1:codSeguridadEMV>string</ns1:codSeguridadEMV>
+
+                 <ns1:dataEMV>string</ns1:dataEMV>
+
+                </tns:infoCHIP>
+
+                <tns:infoAutenticacion>
+
+                 <ns1:clave>string</ns1:clave>
+
+                 <ns1:formatoClave>string</ns1:formatoClave>
+
+                </tns:infoAutenticacion>
+
+                <tns:idTrack>
+
+                 <ns1:track>string</ns1:track>
+
+                 <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+                </tns:idTrack>
+
+                <tns:idTarjetaDebitoPrivada>
+
+                 <ns1:franquicia>string</ns1:franquicia>
+
+                 <ns1:numTarjeta>string</ns1:numTarjeta>
+
+                 <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+                </tns:idTarjetaDebitoPrivada>
+
+                <tns:idTarjetaCreditoPrivada>
+
+                 <ns1:franquicia>string</ns1:franquicia>
+
+                 <ns1:numTarjeta>string</ns1:numTarjeta>
+
+                 <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+                 <ns1:codVerificacion>string</ns1:codVerificacion>
+
+                </tns:idTarjetaCreditoPrivada>
+
+                <tns:idTarjetaCredito>
+
+                 <ns1:franquicia>string</ns1:franquicia>
+
+                 <ns1:numTarjeta>string</ns1:numTarjeta>
+
+                 <ns1:fechaExpiracion>2016-04-18</ns1:fechaExpiracion>
+
+                 <ns1:codVerificacion>string</ns1:codVerificacion>
+
+                </tns:idTarjetaCredito>
+
+                <tns:idCuenta>
+
+                 <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+                 <ns1:numCuenta>string</ns1:numCuenta>
+
+                 <ns1:codBanco>string</ns1:codBanco>
+
+                </tns:idCuenta>
+
+               </tns:infoMedioPago>
+
+               <tns:infoCompra>
+
+                <tns:montoTotal>string</tns:montoTotal>
+
+                <tns:infoImpuestos><!-- between zero and unlimited repetitions of
+            this element -->
+
+                 <ns1:tipoImpuesto>string</ns1:tipoImpuesto>
+
+                 <ns1:monto>string</ns1:monto>
+
+                 <ns1:baseImpuesto>string</ns1:baseImpuesto>
+
+                </tns:infoImpuestos>
+
+                <tns:montoDetallado><!-- between zero and unlimited repetitions
+            of this element -->
+
+                 <ns1:tipoMontoDetallado>string</ns1:tipoMontoDetallado>
+
+                 <ns1:monto>string</ns1:monto>
+
+                </tns:montoDetallado>
+
+                <tns:referencia>string</tns:referencia>
+
+                <tns:cantidadCuotas>3</tns:cantidadCuotas>
+
+               </tns:infoCompra>
+
+              </tns:compraProcesar>
+
+             </soap-env:Body>
+
+            </soap-env:Envelope>
+        compraProcesarOutput:
+          type: object
+          properties:
+            Envelope:
+              xml:
+                prefix: soap-env
+                namespace: 'http://schemas.xmlsoap.org/soap/envelope/'
+              type: object
+              properties:
+                Body:
+                  type: object
+                  properties:
+                    compraProcesarRespuesta:
+                      $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraProcesarRespuesta'
+          example: >-
+            <soap-env:Envelope
+            xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+
+             <soap-env:Body>
+
+              <tns:compraProcesarRespuesta
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/">
+
+               <tns:cabeceraRespuesta>
+
+                <tns:infoPuntoInteraccion>
+
+                 <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+                 <ns2:idTerminal>string</ns2:idTerminal>
+
+                 <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+                 <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+                 <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+                 <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+                </tns:infoPuntoInteraccion>
+
+               </tns:cabeceraRespuesta>
+
+               <tns:infoRespuesta>
+
+                <ns1:codRespuesta>string</ns1:codRespuesta>
+
+                <ns1:descRespuesta>string</ns1:descRespuesta>
+
+                <ns1:estado>string</ns1:estado>
+
+               </tns:infoRespuesta>
+
+               <tns:infoCompraResp>
+
+                <tns:fechaTransaccion>2016-04-18T14:07:37</tns:fechaTransaccion>
+
+                <tns:fechaPosteo>2016-04-18</tns:fechaPosteo>
+
+                <tns:numAprobacion>string</tns:numAprobacion>
+
+                <tns:costoTransaccion>string</tns:costoTransaccion>
+
+                <tns:infoAdicional><!-- between zero and unlimited repetitions of
+            this element -->
+
+                 <ns1:tipoInfo>string</ns1:tipoInfo>
+
+                 <ns1:descripcion>string</ns1:descripcion>
+
+                </tns:infoAdicional>
+
+               </tns:infoCompraResp>
+
+               <tns:idTransaccionAutorizador>3</tns:idTransaccionAutorizador>
+
+               <tns:infoTerminal>
+
+                <ns2:nombreAdquiriente>string</ns2:nombreAdquiriente>
+
+                <ns2:infoUbicacion>
+
+                 <ns1:ciudad>string</ns1:ciudad>
+
+                 <ns1:departamento>string</ns1:departamento>
+
+                 <ns1:pais>string</ns1:pais>
+
+                </ns2:infoUbicacion>
+
+               </tns:infoTerminal>
+
+              </tns:compraProcesarRespuesta>
+
+             </soap-env:Body>
+
+            </soap-env:Envelope>
+        compraProcesarHeader:
+          type: object
+          properties:
+            Security:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/Security'
+        compraReversarInput:
+          type: object
+          properties:
+            Envelope:
+              xml:
+                prefix: soap-env
+                namespace: 'http://schemas.xmlsoap.org/soap/envelope/'
+              type: object
+              properties:
+                Header:
+                  $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraReversarHeader'
+                Body:
+                  type: object
+                  properties:
+                    compraReversarSolicitud:
+                      $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraReversarSolicitud'
+          example: >-
+            <soap-env:Envelope
+            xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+
+             <soap-env:Header>
+
+              <wsse:Security
+            xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+
+               <UsernameToken>
+
+                <Username>string</Username>
+
+                <Password>string</Password>
+
+               </UsernameToken>
+
+              </wsse:Security>
+
+             </soap-env:Header>
+
+             <soap-env:Body>
+
+              <tns:compraReversar
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/">
+
+               <tns:cabeceraSolicitud>
+
+                <tns:infoPuntoInteraccion>
+
+                 <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+                 <ns2:idTerminal>string</ns2:idTerminal>
+
+                 <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+                 <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+                 <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+                 <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+                </tns:infoPuntoInteraccion>
+
+               </tns:cabeceraSolicitud>
+
+               <tns:idPersona>
+
+                <ns1:tipoDocumento>string</ns1:tipoDocumento>
+
+                <ns1:numDocumento>3</ns1:numDocumento>
+
+               </tns:idPersona>
+
+               <tns:infoMedioPago>
+
+                <tns:infoCHIP>
+
+                 <ns1:codSeguridadEMV>string</ns1:codSeguridadEMV>
+
+                 <ns1:dataEMV>string</ns1:dataEMV>
+
+                </tns:infoCHIP>
+
+                <tns:infoAutenticacion>
+
+                 <ns1:clave>string</ns1:clave>
+
+                 <ns1:formatoClave>string</ns1:formatoClave>
+
+                </tns:infoAutenticacion>
+
+                <tns:idTrack>
+
+                 <ns1:track>string</ns1:track>
+
+                 <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+                </tns:idTrack>
+
+                <tns:idTarjetaDebitoPrivada>
+
+                 <ns1:franquicia>string</ns1:franquicia>
+
+                 <ns1:numTarjeta>string</ns1:numTarjeta>
+
+                 <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+                </tns:idTarjetaDebitoPrivada>
+
+                <tns:idTarjetaCreditoPrivada>
+
+                 <ns1:franquicia>string</ns1:franquicia>
+
+                 <ns1:numTarjeta>string</ns1:numTarjeta>
+
+                 <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+                 <ns1:codVerificacion>string</ns1:codVerificacion>
+
+                </tns:idTarjetaCreditoPrivada>
+
+                <tns:idTarjetaCredito>
+
+                 <ns1:franquicia>string</ns1:franquicia>
+
+                 <ns1:numTarjeta>string</ns1:numTarjeta>
+
+                 <ns1:fechaExpiracion>2016-04-18</ns1:fechaExpiracion>
+
+                 <ns1:codVerificacion>string</ns1:codVerificacion>
+
+                </tns:idTarjetaCredito>
+
+                <tns:idCuenta>
+
+                 <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+                 <ns1:numCuenta>string</ns1:numCuenta>
+
+                 <ns1:codBanco>string</ns1:codBanco>
+
+                </tns:idCuenta>
+
+               </tns:infoMedioPago>
+
+               <tns:infoCompra>
+
+                <tns:montoTotal>string</tns:montoTotal>
+
+                <tns:infoImpuestos><!-- between zero and unlimited repetitions of
+            this element -->
+
+                 <ns1:tipoImpuesto>string</ns1:tipoImpuesto>
+
+                 <ns1:monto>string</ns1:monto>
+
+                 <ns1:baseImpuesto>string</ns1:baseImpuesto>
+
+                </tns:infoImpuestos>
+
+                <tns:montoDetallado><!-- between zero and unlimited repetitions
+            of this element -->
+
+                 <ns1:tipoMontoDetallado>string</ns1:tipoMontoDetallado>
+
+                 <ns1:monto>string</ns1:monto>
+
+                </tns:montoDetallado>
+
+                <tns:referencia>string</tns:referencia>
+
+                <tns:cantidadCuotas>3</tns:cantidadCuotas>
+
+               </tns:infoCompra>
+
+              </tns:compraReversar>
+
+             </soap-env:Body>
+
+            </soap-env:Envelope>
+        compraReversarOutput:
+          type: object
+          properties:
+            Envelope:
+              xml:
+                prefix: soap-env
+                namespace: 'http://schemas.xmlsoap.org/soap/envelope/'
+              type: object
+              properties:
+                Body:
+                  type: object
+                  properties:
+                    compraReversarRespuesta:
+                      $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/compraReversarRespuesta'
+          example: >-
+            <soap-env:Envelope
+            xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+
+             <soap-env:Body>
+
+              <tns:compraReversarRespuesta
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/">
+
+               <tns:cabeceraRespuesta>
+
+                <tns:infoPuntoInteraccion>
+
+                 <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+                 <ns2:idTerminal>string</ns2:idTerminal>
+
+                 <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+                 <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+                 <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+                 <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+                </tns:infoPuntoInteraccion>
+
+               </tns:cabeceraRespuesta>
+
+               <tns:infoRespuesta>
+
+                <ns1:codRespuesta>string</ns1:codRespuesta>
+
+                <ns1:descRespuesta>string</ns1:descRespuesta>
+
+                <ns1:estado>string</ns1:estado>
+
+               </tns:infoRespuesta>
+
+               <tns:infoCompraResp>
+
+                <tns:fechaTransaccion>2016-04-18T14:07:37</tns:fechaTransaccion>
+
+                <tns:fechaPosteo>2016-04-18</tns:fechaPosteo>
+
+                <tns:numAprobacion>string</tns:numAprobacion>
+
+                <tns:costoTransaccion>string</tns:costoTransaccion>
+
+                <tns:infoAdicional><!-- between zero and unlimited repetitions of
+            this element -->
+
+                 <ns1:tipoInfo>string</ns1:tipoInfo>
+
+                 <ns1:descripcion>string</ns1:descripcion>
+
+                </tns:infoAdicional>
+
+               </tns:infoCompraResp>
+
+               <tns:idTransaccionAutorizador>3</tns:idTransaccionAutorizador>
+
+               <tns:infoTerminal>
+
+                <ns2:nombreAdquiriente>string</ns2:nombreAdquiriente>
+
+                <ns2:infoUbicacion>
+
+                 <ns1:ciudad>string</ns1:ciudad>
+
+                 <ns1:departamento>string</ns1:departamento>
+
+                 <ns1:pais>string</ns1:pais>
+
+                </ns2:infoUbicacion>
+
+               </tns:infoTerminal>
+
+              </tns:compraReversarRespuesta>
+
+             </soap-env:Body>
+
+            </soap-env:Envelope>
+        compraReversarHeader:
+          type: object
+          properties:
+            Security:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/Security'
+        compraProcesarSolicitud:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            cabeceraSolicitud:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCabeceraSolicitud'
+            idPersona:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdPersona'
+            infoMedioPago:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoMedioPago'
+            infoCompra:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoCompra'
+          example: >-
+            <tns:compraProcesar
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/"
+            xmlns:ns2="http://www.rbm.com.co/esb/comercio/"
+            xmlns:ns1="http://www.rbm.com.co/esb/">
+
+             <tns:cabeceraSolicitud>
+
+              <tns:infoPuntoInteraccion>
+
+               <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+               <ns2:idTerminal>string</ns2:idTerminal>
+
+               <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+               <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+               <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+               <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+              </tns:infoPuntoInteraccion>
+
+             </tns:cabeceraSolicitud>
+
+             <tns:idPersona>
+
+              <ns1:tipoDocumento>string</ns1:tipoDocumento>
+
+              <ns1:numDocumento>3</ns1:numDocumento>
+
+             </tns:idPersona>
+
+             <tns:infoMedioPago>
+
+              <tns:infoCHIP>
+
+               <ns1:codSeguridadEMV>string</ns1:codSeguridadEMV>
+
+               <ns1:dataEMV>string</ns1:dataEMV>
+
+              </tns:infoCHIP>
+
+              <tns:infoAutenticacion>
+
+               <ns1:clave>string</ns1:clave>
+
+               <ns1:formatoClave>string</ns1:formatoClave>
+
+              </tns:infoAutenticacion>
+
+              <tns:idTrack>
+
+               <ns1:track>string</ns1:track>
+
+               <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+              </tns:idTrack>
+
+              <tns:idTarjetaDebitoPrivada>
+
+               <ns1:franquicia>string</ns1:franquicia>
+
+               <ns1:numTarjeta>string</ns1:numTarjeta>
+
+               <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+              </tns:idTarjetaDebitoPrivada>
+
+              <tns:idTarjetaCreditoPrivada>
+
+               <ns1:franquicia>string</ns1:franquicia>
+
+               <ns1:numTarjeta>string</ns1:numTarjeta>
+
+               <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+               <ns1:codVerificacion>string</ns1:codVerificacion>
+
+              </tns:idTarjetaCreditoPrivada>
+
+              <tns:idTarjetaCredito>
+
+               <ns1:franquicia>string</ns1:franquicia>
+
+               <ns1:numTarjeta>string</ns1:numTarjeta>
+
+               <ns1:fechaExpiracion>2016-04-18</ns1:fechaExpiracion>
+
+               <ns1:codVerificacion>string</ns1:codVerificacion>
+
+              </tns:idTarjetaCredito>
+
+              <tns:idCuenta>
+
+               <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+               <ns1:numCuenta>string</ns1:numCuenta>
+
+               <ns1:codBanco>string</ns1:codBanco>
+
+              </tns:idCuenta>
+
+             </tns:infoMedioPago>
+
+             <tns:infoCompra>
+
+              <tns:montoTotal>string</tns:montoTotal>
+
+              <tns:infoImpuestos><!-- between zero and unlimited repetitions of
+            this element -->
+
+               <ns1:tipoImpuesto>string</ns1:tipoImpuesto>
+
+               <ns1:monto>string</ns1:monto>
+
+               <ns1:baseImpuesto>string</ns1:baseImpuesto>
+
+              </tns:infoImpuestos>
+
+              <tns:montoDetallado><!-- between zero and unlimited repetitions of
+            this element -->
+
+               <ns1:tipoMontoDetallado>string</ns1:tipoMontoDetallado>
+
+               <ns1:monto>string</ns1:monto>
+
+              </tns:montoDetallado>
+
+              <tns:referencia>string</tns:referencia>
+
+              <tns:cantidadCuotas>3</tns:cantidadCuotas>
+
+             </tns:infoCompra>
+
+            </tns:compraProcesar>
+        compraProcesarRespuesta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            cabeceraRespuesta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCabeceraSolicitud'
+            infoRespuesta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoRespuesta'
+            infoCompraResp:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoCompraResp'
+            idTransaccionAutorizador:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTransaccionAutorizador'
+            infoTerminal:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoTerminal'
+          example: >-
+            <tns:compraProcesarRespuesta
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/"
+            xmlns:ns2="http://www.rbm.com.co/esb/comercio/"
+            xmlns:ns1="http://www.rbm.com.co/esb/">
+
+             <tns:cabeceraRespuesta>
+
+              <tns:infoPuntoInteraccion>
+
+               <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+               <ns2:idTerminal>string</ns2:idTerminal>
+
+               <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+               <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+               <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+               <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+              </tns:infoPuntoInteraccion>
+
+             </tns:cabeceraRespuesta>
+
+             <tns:infoRespuesta>
+
+              <ns1:codRespuesta>string</ns1:codRespuesta>
+
+              <ns1:descRespuesta>string</ns1:descRespuesta>
+
+              <ns1:estado>string</ns1:estado>
+
+             </tns:infoRespuesta>
+
+             <tns:infoCompraResp>
+
+              <tns:fechaTransaccion>2016-04-18T14:07:37</tns:fechaTransaccion>
+
+              <tns:fechaPosteo>2016-04-18</tns:fechaPosteo>
+
+              <tns:numAprobacion>string</tns:numAprobacion>
+
+              <tns:costoTransaccion>string</tns:costoTransaccion>
+
+              <tns:infoAdicional><!-- between zero and unlimited repetitions of
+            this element -->
+
+               <ns1:tipoInfo>string</ns1:tipoInfo>
+
+               <ns1:descripcion>string</ns1:descripcion>
+
+              </tns:infoAdicional>
+
+             </tns:infoCompraResp>
+
+             <tns:idTransaccionAutorizador>3</tns:idTransaccionAutorizador>
+
+             <tns:infoTerminal>
+
+              <ns2:nombreAdquiriente>string</ns2:nombreAdquiriente>
+
+              <ns2:infoUbicacion>
+
+               <ns1:ciudad>string</ns1:ciudad>
+
+               <ns1:departamento>string</ns1:departamento>
+
+               <ns1:pais>string</ns1:pais>
+
+              </ns2:infoUbicacion>
+
+             </tns:infoTerminal>
+
+            </tns:compraProcesarRespuesta>
+        compraReversarSolicitud:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            cabeceraSolicitud:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCabeceraSolicitud'
+            idPersona:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdPersona'
+            infoMedioPago:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoMedioPago'
+            infoCompra:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoCompra'
+          example: >-
+            <tns:compraReversar
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/"
+            xmlns:ns2="http://www.rbm.com.co/esb/comercio/"
+            xmlns:ns1="http://www.rbm.com.co/esb/">
+
+             <tns:cabeceraSolicitud>
+
+              <tns:infoPuntoInteraccion>
+
+               <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+               <ns2:idTerminal>string</ns2:idTerminal>
+
+               <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+               <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+               <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+               <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+              </tns:infoPuntoInteraccion>
+
+             </tns:cabeceraSolicitud>
+
+             <tns:idPersona>
+
+              <ns1:tipoDocumento>string</ns1:tipoDocumento>
+
+              <ns1:numDocumento>3</ns1:numDocumento>
+
+             </tns:idPersona>
+
+             <tns:infoMedioPago>
+
+              <tns:infoCHIP>
+
+               <ns1:codSeguridadEMV>string</ns1:codSeguridadEMV>
+
+               <ns1:dataEMV>string</ns1:dataEMV>
+
+              </tns:infoCHIP>
+
+              <tns:infoAutenticacion>
+
+               <ns1:clave>string</ns1:clave>
+
+               <ns1:formatoClave>string</ns1:formatoClave>
+
+              </tns:infoAutenticacion>
+
+              <tns:idTrack>
+
+               <ns1:track>string</ns1:track>
+
+               <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+              </tns:idTrack>
+
+              <tns:idTarjetaDebitoPrivada>
+
+               <ns1:franquicia>string</ns1:franquicia>
+
+               <ns1:numTarjeta>string</ns1:numTarjeta>
+
+               <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+              </tns:idTarjetaDebitoPrivada>
+
+              <tns:idTarjetaCreditoPrivada>
+
+               <ns1:franquicia>string</ns1:franquicia>
+
+               <ns1:numTarjeta>string</ns1:numTarjeta>
+
+               <ns1:tipoBolsillo>string</ns1:tipoBolsillo>
+
+               <ns1:codVerificacion>string</ns1:codVerificacion>
+
+              </tns:idTarjetaCreditoPrivada>
+
+              <tns:idTarjetaCredito>
+
+               <ns1:franquicia>string</ns1:franquicia>
+
+               <ns1:numTarjeta>string</ns1:numTarjeta>
+
+               <ns1:fechaExpiracion>2016-04-18</ns1:fechaExpiracion>
+
+               <ns1:codVerificacion>string</ns1:codVerificacion>
+
+              </tns:idTarjetaCredito>
+
+              <tns:idCuenta>
+
+               <ns1:tipoCuenta>string</ns1:tipoCuenta>
+
+               <ns1:numCuenta>string</ns1:numCuenta>
+
+               <ns1:codBanco>string</ns1:codBanco>
+
+              </tns:idCuenta>
+
+             </tns:infoMedioPago>
+
+             <tns:infoCompra>
+
+              <tns:montoTotal>string</tns:montoTotal>
+
+              <tns:infoImpuestos><!-- between zero and unlimited repetitions of
+            this element -->
+
+               <ns1:tipoImpuesto>string</ns1:tipoImpuesto>
+
+               <ns1:monto>string</ns1:monto>
+
+               <ns1:baseImpuesto>string</ns1:baseImpuesto>
+
+              </tns:infoImpuestos>
+
+              <tns:montoDetallado><!-- between zero and unlimited repetitions of
+            this element -->
+
+               <ns1:tipoMontoDetallado>string</ns1:tipoMontoDetallado>
+
+               <ns1:monto>string</ns1:monto>
+
+              </tns:montoDetallado>
+
+              <tns:referencia>string</tns:referencia>
+
+              <tns:cantidadCuotas>3</tns:cantidadCuotas>
+
+             </tns:infoCompra>
+
+            </tns:compraReversar>
+        compraReversarRespuesta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            cabeceraRespuesta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCabeceraSolicitud'
+            infoRespuesta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoRespuesta'
+            infoCompraResp:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoCompraResp'
+            idTransaccionAutorizador:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTransaccionAutorizador'
+            infoTerminal:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoTerminal'
+          example: >-
+            <tns:compraReversarRespuesta
+            xmlns:tns="http://www.rbm.com.co/esb/comercio/compra/"
+            xmlns:ns2="http://www.rbm.com.co/esb/comercio/"
+            xmlns:ns1="http://www.rbm.com.co/esb/">
+
+             <tns:cabeceraRespuesta>
+
+              <tns:infoPuntoInteraccion>
+
+               <ns2:tipoTerminal>string</ns2:tipoTerminal>
+
+               <ns2:idTerminal>string</ns2:idTerminal>
+
+               <ns2:idAdquiriente>string</ns2:idAdquiriente>
+
+               <ns2:idTransaccionTerminal>3</ns2:idTransaccionTerminal>
+
+               <ns2:modoCapturaPAN>string</ns2:modoCapturaPAN>
+
+               <ns2:capacidadPIN>string</ns2:capacidadPIN>
+
+              </tns:infoPuntoInteraccion>
+
+             </tns:cabeceraRespuesta>
+
+             <tns:infoRespuesta>
+
+              <ns1:codRespuesta>string</ns1:codRespuesta>
+
+              <ns1:descRespuesta>string</ns1:descRespuesta>
+
+              <ns1:estado>string</ns1:estado>
+
+             </tns:infoRespuesta>
+
+             <tns:infoCompraResp>
+
+              <tns:fechaTransaccion>2016-04-18T14:07:37</tns:fechaTransaccion>
+
+              <tns:fechaPosteo>2016-04-18</tns:fechaPosteo>
+
+              <tns:numAprobacion>string</tns:numAprobacion>
+
+              <tns:costoTransaccion>string</tns:costoTransaccion>
+
+              <tns:infoAdicional><!-- between zero and unlimited repetitions of
+            this element -->
+
+               <ns1:tipoInfo>string</ns1:tipoInfo>
+
+               <ns1:descripcion>string</ns1:descripcion>
+
+              </tns:infoAdicional>
+
+             </tns:infoCompraResp>
+
+             <tns:idTransaccionAutorizador>3</tns:idTransaccionAutorizador>
+
+             <tns:infoTerminal>
+
+              <ns2:nombreAdquiriente>string</ns2:nombreAdquiriente>
+
+              <ns2:infoUbicacion>
+
+               <ns1:ciudad>string</ns1:ciudad>
+
+               <ns1:departamento>string</ns1:departamento>
+
+               <ns1:pais>string</ns1:pais>
+
+              </ns2:infoUbicacion>
+
+             </tns:infoTerminal>
+
+            </tns:compraReversarRespuesta>
+        TipoCabeceraSolicitud:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            infoPuntoInteraccion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoPuntoInteraccion'
+        TipoIdPersona:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            tipoDocumento:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoDocumento'
+            numDocumento:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoNumDocumento'
+        TipoInfoMedioPago:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            infoCHIP:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoCHIP'
+            infoAutenticacion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoAutenticacion'
+            idTrack:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTrack'
+            idTarjetaDebitoPrivada:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTarjetaDebitoPrivada'
+            idTarjetaCreditoPrivada:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTarjetaCreditoPrivada'
+            idTarjetaCredito:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTarjetaCredito'
+            idCuenta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdCuenta'
+          description: |-
+            idTrack: Warning: CHOICE element;
+            idTarjetaDebitoPrivada: Warning: CHOICE element;
+            idTarjetaCreditoPrivada: Warning: CHOICE element;
+            idTarjetaCredito: Warning: CHOICE element;
+            idCuenta: Warning: CHOICE element
+        TipoInfoCompra:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            montoTotal:
+              type: string
+            infoImpuestos:
+              type: array
+              items:
+                $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoImpuestos'
+            montoDetallado:
+              type: array
+              items:
+                $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoMontoDetallado'
+            referencia:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoReferencia'
+            cantidadCuotas:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCantidadCuotas'
+        TipoInfoRespuesta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            codRespuesta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCodRespuesta'
+            descRespuesta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoDescripcion'
+            estado:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoEstado'
+        TipoInfoCompraResp:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: object
+          properties:
+            fechaTransaccion:
+              type: string
+              format: date-time
+            fechaPosteo:
+              type: string
+              format: date
+            numAprobacion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoNumAprobacion'
+            costoTransaccion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoMonto'
+            infoAdicional:
+              type: array
+              items:
+                $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoAdicional'
+        TipoIdTransaccionAutorizador:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: integer
+          format: int64
+        TipoInfoTerminal:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: object
+          properties:
+            nombreAdquiriente:
+              type: string
+            infoUbicacion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoInfoUbicacion'
+        TipoInfoPuntoInteraccion:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: object
+          properties:
+            tipoTerminal:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoTerminal'
+            idTerminal:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTerminal'
+            idAdquiriente:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdAdquiriente'
+            idTransaccionTerminal:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoIdTransaccionTerminal'
+            modoCapturaPAN:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoModoCapturaPAN'
+            capacidadPIN:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCapacidadPIN'
+        TipoTipoDocumento:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          enum:
+            - CC
+            - TI
+            - CE
+            - NI
+            - PS
+        TipoNumDocumento:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: integer
+          format: int64
+        TipoInfoCHIP:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            codSeguridadEMV:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCodSeguridadEMV'
+            dataEMV:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoDataEMV'
+        TipoInfoAutenticacion:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            clave:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoClave'
+            formatoClave:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoFormatoClave'
+        TipoIdTrack:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            track:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTrack'
+            tipoCuenta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoBolsillo'
+        TipoIdTarjetaDebitoPrivada:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            franquicia:
+              type: string
+            numTarjeta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoNumTarjeta'
+            tipoBolsillo:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoBolsillo'
+        TipoIdTarjetaCreditoPrivada:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            franquicia:
+              type: string
+            numTarjeta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoNumTarjeta'
+            tipoBolsillo:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoBolsillo'
+            codVerificacion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCodVerficacion'
+        TipoIdTarjetaCredito:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            franquicia:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoFranquicia'
+            numTarjeta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoNumTarjeta'
+            fechaExpiracion:
+              type: string
+              format: date
+            codVerificacion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCodVerficacion'
+        TipoIdCuenta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            tipoCuenta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoCuenta'
+            numCuenta:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoNumCuenta'
+            codBanco:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoCodBanco'
+        TipoInfoImpuestos:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            tipoImpuesto:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoImpuesto'
+            monto:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoMonto'
+            baseImpuesto:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoMonto'
+        TipoMontoDetallado:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            tipoMontoDetallado:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoMontoDetallado'
+            monto:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoMonto'
+        TipoReferencia:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: string
+          maxLength: 25
+        TipoCantidadCuotas:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/compra/'
+            prefix: tns
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+        TipoCodRespuesta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 4
+        TipoDescripcion:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 128
+        TipoEstado:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 10
+        TipoNumAprobacion:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 6
+        TipoMonto:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+        TipoInfoAdicional:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            tipoInfo:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoTipoInfo'
+            descripcion:
+              $ref: '#/x-ibm-configuration/targets/CompraElectronica_HTTP_Service/definitions/TipoDescripcion'
+        TipoInfoUbicacion:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: object
+          properties:
+            ciudad:
+              type: string
+            departamento:
+              type: string
+            pais:
+              type: string
+        TipoTipoTerminal:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: string
+          enum:
+            - WEB
+            - OrdenTelefonico
+            - POS
+            - Movil
+            - OrdenCorreo
+            - GlobalPay
+            - PEW
+            - SmartPhone
+            - Tablet
+            - TVDigital
+            - BilleteraImpresa
+            - BilleteraPOS
+            - BilleteraAPP
+            - BilleteraEComm
+            - BilleteraRBMovil
+            - DatafonoWeb
+            - APPRBM
+            - APPBanco
+        TipoIdTerminal:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: string
+          maxLength: 8
+        TipoIdAdquiriente:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: string
+          maxLength: 19
+        TipoIdTransaccionTerminal:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: integer
+          format: int64
+        TipoModoCapturaPAN:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: string
+          enum:
+            - Manual
+            - Banda
+            - Barras
+            - OCR
+            - CHIP
+            - ContactlessBanda
+            - ContactlessChip
+            - Fallback
+            - E-commerce
+        TipoCapacidadPIN:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/comercio/'
+            prefix: ns2
+          type: string
+          enum:
+            - Desconocido
+            - Permitido
+            - NoPermitido
+            - FueraDeServicio
+            - Verificado
+            - NoPermitidoBatch
+            - Virtual
+        TipoCodSeguridadEMV:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          pattern: '[0-9]*'
+        TipoDataEMV:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 512
+        TipoClave:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+        TipoFormatoClave:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 10
+        TipoTrack:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 37
+        TipoTipoBolsillo:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          enum:
+            - Lealtad
+            - CuotaMonetaria
+            - CupoCredito
+            - BonoEfectivo
+            - CreditoRotativoBolsillo
+            - BonoRegalo
+            - BonoDescuento
+            - BolsilloCredito
+            - BolsilloDebito
+            - Ahorros
+            - Corriente
+            - Credito
+            - Desconocida
+            - CreditoRotativo
+        TipoNumTarjeta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          pattern: '[0-9]*'
+          maxLength: 19
+        TipoCodVerficacion:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          pattern: '[0-9]*'
+          maxLength: 4
+        TipoFranquicia:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          enum:
+            - MasterCard
+            - VISA
+            - AmEx
+            - DinersClub
+            - UnionPay
+            - CMRFalabella
+            - JCB
+            - Codensa
+            - sociosbbva
+        TipoTipoCuenta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          enum:
+            - Ahorros
+            - Corriente
+            - CreditoRotativo
+            - Credito
+        TipoNumCuenta:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          pattern: '[0-9]*'
+          maxLength: 19
+        TipoCodBanco:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          pattern: '[0-9]*'
+          maxLength: 4
+        TipoTipoImpuesto:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          enum:
+            - IVA
+            - Consumo
+        TipoTipoMontoDetallado:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          enum:
+            - MontoAdicional
+            - Descuento
+            - BaseDevolucionIVA
+        TipoTipoInfo:
+          xml:
+            namespace: 'http://www.rbm.com.co/esb/'
+            prefix: ns1
+          type: string
+          maxLength: 15
+paths:
+  /path-1:
+    post:
+      responses:
+        '200':
+          description: 200 OK
+      parameters:
+        - name: api_parameter-1
+          required: false
+          in: body
+          schema:
+            type: string
+definitions: {}
+tags: []

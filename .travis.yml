@@ -10,3 +10,5 @@ node_js:
 
 script:
 - npm install
+- node apicia.js --load .bm
+- rm -rf node_modules
