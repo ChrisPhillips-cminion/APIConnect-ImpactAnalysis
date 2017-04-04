@@ -3,7 +3,7 @@
 'use strict';
 var f = require('./lib/functions.js');
 var config = require('./lib/config.js');
-var getData = require('./lib/getData');
+var getData = require('./lib/getData.js');
 
 if (config.showHelp) {
 
