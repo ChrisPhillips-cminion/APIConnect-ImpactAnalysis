@@ -7,8 +7,8 @@
 /**
  * Module dependencies.
  */
-
-var call = require('./call');
+var path = require('path');
+var f = require('./functions.js')
 
 /*
  * This function handles logging into an APIC MGMT server.
@@ -24,8 +24,9 @@ function apicLogin(username, password, server, callback) {
     if (!username || !password || !server) {
         return callback("Error: Missing parameters");
     }
-    var loginString = 'node_modules/.bin/apic login --username ' + username + ' --password ' + password + ' --server ' + server;
-    call(loginString, function (err, stdout) {
+    var apicpath = path.join('.','node_modules','.bin','apic')
+    var loginString = apicpath+' login --username ' + username + ' --password ' + password + ' --server ' + server;
+    f.call(loginString, function (err, stdout) {
         if (err) {
             console.error("ERR: " + err.toString().replace("--password "+password, "--password ******"));
         }
