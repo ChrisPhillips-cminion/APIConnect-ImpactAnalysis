@@ -9,6 +9,7 @@
  */
 var path = require('path');
 var f = require('./functions.js')
+var printf = require('sprintf')
 
 /*
  * This function handles logging into an APIC MGMT server.
@@ -25,7 +26,7 @@ function apicLogin(username, password, server, callback) {
         return callback("Error: Missing parameters");
     }
     var apicpath = path.join('.','node_modules','.bin','apic')
-    var loginString = apicpath+' login --username ' + username + ' --password ' + password + ' --server ' + server;
+    var loginString = printf('%s login --username "%s" --password "%s" --server "%s"',apicpath,username,password,server);
     f.call(loginString, function (err, stdout) {
         if (err) {
             console.error("ERR: " + err.toString().replace("--password "+password, "--password ******"));

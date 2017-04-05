@@ -37,6 +37,7 @@
     "readline2": "^1.0.1",
     "restore-cursor": "^2.0.0",
     "rx": "^4.1.0",
+    "sprintf": "^0.1.5",
     "strong-globalize": "^2.x",
     "through": "^2.3.8",
     "window-size": "^0.2.0"
