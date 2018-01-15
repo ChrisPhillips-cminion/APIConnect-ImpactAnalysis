@@ -5,28 +5,30 @@ The purpose of this tool is to assess an API Catalog on API Connect and return t
 
 ```
 Sandbox
-└────> Service Host - company.com
-    ├────> Service Path - /card
-    │ ├────>API - Switchable : 1.0.0
-    │ └────>API - Gateway users : 1.0.0
-    ├────>/bank
-    │ ├────>API - Chicken : 1.0.0
-    │ └────>API - Agent : 1.0.0
-    ├────>/core
-    │ ├────>API - Auto Loan Account Fantastic Wooden Towels : 1.0.0
-    │ └────>API - supply-chains : 1.0.0
-    └────>/request/soap
-        ├────>API - supply-chains Optimization : 1.0.0
-        └────>API - scalable Concrete Granite : 1.0.0
-```
-The information in the example above is displayed in the following schema
-
-```
-Catalog
-└────> Service - Server / QueueManager
-    └────> Service - Path / Queue
-        └────> API
-
+├────>Policy Name operation-switch
+│ └────>Policy Version - 1.0.0
+│     ├────>API - barcodes : 1.0.1
+│     ├────>API - CredToISA : 1.0.0
+│     ├────>API - Payment Initiation APIs : v1.0.5
+│     ├────>API - ISAMPSD2OauthProxy : 1.0.0
+│     └────>API - Account Information APIs BOS : v1.0-rc4
+├────>Policy Name gatewayscript
+│ └────>Policy Version - 1.0.0
+│     ├────>API - AResourceFlow : 1.0.0
+│     ├────>API - InvokeURLtoVariable : 1.0.0
+│     ├────>API - Analyses : 1.0.0
+│     ├────>API - JWKS : 2
+│     ├────>API - RegisterAPI : 1.0.0
+│     ├────>API - Account Information APIs BOS : v1.0-rc4
+│     ├────>API - FakeIntroRersource : 1.0.0
+│     └────>API - JWKS : 1.0.0
+├────>Policy Name apimockajson
+│ └────>Policy Version - 1.0.0
+│     ├────>API - AFakeIntrospect : 1.0.0
+│     └────>API - FakeIntroSpect : 1.0.0
+├────>Invoke Host - http://
+│ └────>Invoke ContextRoute - /$(Invoke_URL)
+│     └────>API - InvokeURLtoVariable : 1.0.0```
 ```
 
 Using this tool, you can seamlessly review the back-end services and understand the critical dependencies of your APIs. This is beneficial for at-a-glance assessments and understanding of your APIc estate.
