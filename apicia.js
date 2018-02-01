@@ -8,7 +8,6 @@ else {
         processDir = require("./lib/processDir.js");
     handleUserInput(config, function() {
         getData(config, function(e) {
-            console.log(config)
             processDir(e, config, function(e) {
                 if (console.error("\nResults of analysis: "), f.printDivideLine(), "json" === config.output) console.log(JSON.stringify(e));
                 else {
