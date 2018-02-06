@@ -1,0 +1,24 @@
+{
+  "detailed": false,
+  "tempfolder": "tmp",
+  "output": "console",
+  "catalog": {
+    "sb": {
+      "displayName": "Sandbox",
+      "machineName": "sb"
+    }
+  },
+  "password": "IW4wcjF0NUBD",
+  "username": "chris.phillips@uk.ibm.com",
+  "server": "apimdev2017.hursley.ibm.com",
+  "organization": "chris-org",
+  "dataType": "Invokes and Proxies",
+  "displaySchema": [
+    "Policy / Service Details 1",
+    "Policy / Service Details 2",
+    "API",
+    "Product",
+    "Plan",
+    "Application"
+  ]
+}
