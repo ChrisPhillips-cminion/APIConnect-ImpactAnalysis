@@ -3,6 +3,7 @@ var f = require("./lib/functions.js"),
     config = require("./lib/config.js"),
     getData = require("./lib/getData.js"),
     fet = require('foreachthen'),
+    fs = require('fs'),
     json2csv = require('json2csv');
 if (config.showHelp) f.showHelp();
 else {
@@ -68,22 +69,51 @@ function addEntry(obj, string, cb) {
 }
 
 function printOutput(config, e) {
+  console.log(config)
     if (console.error("Results of analysis: "), f.printDivideLine(), "json" === config.output) {
+
         console.log(JSON.stringify(e));
+
+        if (config.file) {
+            fs.writeFile(config.file, e, function(err) {
+                if (err) {
+                    throw err;
+                }
+                console.log("File written to "+config.file)
+            });
+        }
+
     } else if ("csv" === config.output) {
         // var csv = json2csv({ data: e });
         var string = 'Catalog';
         config.displaySchema.forEach(function(s) {
-            string = string +','+s;
+            string = string + ',' + s;
         });
-        console.log(string);
+
         addEntry(e, '', function() {
             array.forEach(function(s) {
-                console.log(s);
+                string=string+"\n"+s;
             });
         });
+        console.log(string);
+        if (config.file) {
+            fs.writeFile(config.file, string, function(err) {
+                if (err) {
+                    throw err;
+                }
+                console.log("File written to "+config.file)
+            });
+        }
     } else {
         var i = require("json-hood");
         i.printJSONasArrowDiagram(e)
+        if (config.file) {
+            fs.writeFile(config.file, i.getJSONasArrowDiagram(e), function(err) {
+                if (err) {
+                    throw err;
+                }
+                console.log("File written to "+config.file)
+            });
+        }
     }
 }
