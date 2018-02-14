@@ -69,7 +69,6 @@ function addEntry(obj, string, cb) {
 }
 
 function printOutput(config, e) {
-  console.log(config)
     if (console.error("Results of analysis: "), f.printDivideLine(), "json" === config.output) {
 
         console.log(JSON.stringify(e));
