@@ -42,6 +42,10 @@ var array = [];
 
 function addEntry(obj, string, cb) {
     fet.ObejctForEachThenSeries(obj, function(cb2, entry, val, idx) {
+        if (val == "No Products found") {
+          cb2();
+        }
+        else {
         var stringNew = '';
         if (string === '') {
             stringNew = entry
@@ -50,6 +54,7 @@ function addEntry(obj, string, cb) {
         }
         // console.log(entry)
         if (Object.keys(val).length != 0) {
+
             addEntry(val, stringNew, function() {
                 cb2();
             });
@@ -59,6 +64,7 @@ function addEntry(obj, string, cb) {
             // string = string + "," + val
             // console.log();
             cb2();
+        }
         }
     }, function() {
         // array.forEach(function(s) {
