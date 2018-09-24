@@ -16,6 +16,7 @@ else {
             if (config.dataType.indexOf("Invokes and Proxies") > -1) {
                 var processDir = undefined;
                 processDir = require("./lib/processDir.js");
+                //
                 processDir(e, config, function(e) {
                     printOutput(config, e);
                 })
