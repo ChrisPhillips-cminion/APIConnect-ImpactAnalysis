@@ -44,32 +44,27 @@ var array = [];
 function addEntry(obj, string, cb) {
     fet.ObejctForEachThenSeries(obj, function(cb2, entry, val, idx) {
         if (val == "No Products found") {
-          cb2();
-        }
-        else {
-        var stringNew = '';
-        if (string === '') {
-            stringNew = entry
-        } else {
-            stringNew = string + "," + entry
-        }
-        // console.log(entry)
-        if (Object.keys(val).length != 0) {
-
-            addEntry(val, stringNew, function() {
-                cb2();
-            });
-        } else {
-            array.push(stringNew)
-            // console.log(stringNew)
-            // string = string + "," + val
-            // console.log();
             cb2();
-        }
+        } else {
+            var stringNew = '';
+            if (string === '') {
+                stringNew = entry
+            } else {
+                stringNew = string + "," + entry
+            }
+            if (Object.keys(val).length != 0) {
+
+                addEntry(val, stringNew, function() {
+                    cb2();
+                });
+            } else {
+                array.push(stringNew)
+                // string = string + "," + val
+                cb2();
+            }
         }
     }, function() {
         // array.forEach(function(s) {
-        //     console.log(s);
         // });
         cb();
     });
@@ -78,14 +73,13 @@ function addEntry(obj, string, cb) {
 function printOutput(config, e) {
     if (console.error("Results of analysis: "), f.printDivideLine(), "json" === config.output) {
 
-        console.log(JSON.stringify(e));
-
+        console.log(e)
         if (config.file) {
             fs.writeFile(config.file, e, function(err) {
                 if (err) {
                     throw err;
                 }
-                console.log("File written to "+config.file)
+                console.log("File written to " + config.file)
             });
         }
 
@@ -98,16 +92,16 @@ function printOutput(config, e) {
 
         addEntry(e, '', function() {
             array.forEach(function(s) {
-                string=string+"\n"+s;
+                string = string + "\n" + s;
             });
         });
-        console.log(string);
+        console.log(string)
         if (config.file) {
             fs.writeFile(config.file, string, function(err) {
                 if (err) {
                     throw err;
                 }
-                console.log("File written to "+config.file)
+                console.log("File written to " + config.file)
             });
         }
     } else {
@@ -118,7 +112,7 @@ function printOutput(config, e) {
                 if (err) {
                     throw err;
                 }
-                console.log("File written to "+config.file)
+                console.log("File written to " + config.file)
             });
         }
     }
