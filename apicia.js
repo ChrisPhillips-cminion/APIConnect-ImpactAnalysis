@@ -4,7 +4,7 @@ var f = require("./lib/functions.js"),
     getData = require("./lib/getData.js"),
     fet = require('foreachthen'),
     fs = require('fs'),
-    json2csv = require('json2csv');
+
 if (config.showHelp) f.showHelp();
 else {
     var handleUserInput = require("./lib/handleUserInput.js")
@@ -71,9 +71,13 @@ function addEntry(obj, string, cb) {
 }
 
 function printOutput(config, e) {
-    if (console.error("Results of analysis: "), f.printDivideLine(), "json" === config.output) {
 
-        console.log(e)
+    console.error("Results of analysis: ")
+    f.printDivideLine()
+
+    if ("json" === config.output) {
+
+        console.log(JSON.stringify(e).replace(new RegExp('.u001b.[0-9][0-9]?m', 'g'), ''))
         if (config.file) {
             fs.writeFile(config.file, e, function(err) {
                 if (err) {
