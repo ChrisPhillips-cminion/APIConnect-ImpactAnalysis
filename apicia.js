@@ -3,7 +3,7 @@ var f = require("./lib/functions.js"),
     config = require("./lib/config.js"),
     getData = require("./lib/getData.js"),
     fet = require('foreachthen'),
-    fs = require('fs'),
+    fs = require('fs')
 
 if (config.showHelp) f.showHelp();
 else {
