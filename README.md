@@ -1,3 +1,9 @@
+# BETA BRANCH
+
+*v5 Not Tested*
+
+*V2018 no Applications or Subscriptions*
+
 # APICIA - API Connect Impact Analysis
 
 Understanding interdependencies between the API Components and the back-end Service is critical for a successful business.
