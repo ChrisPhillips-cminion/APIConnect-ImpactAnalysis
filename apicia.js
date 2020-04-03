@@ -79,7 +79,7 @@ function printOutput(config, e) {
 
         console.log(JSON.stringify(e).replace(new RegExp('.u001b.[0-9][0-9]?m', 'g'), ''))
         if (config.file) {
-            fs.writeFile(config.file, e, function(err) {
+            fs.writeFile(config.file, JSON.stringify(e).replace(new RegExp('.u001b.[0-9][0-9]?m', 'g'), ''), function(err) {
                 if (err) {
                     throw err;
                 }
